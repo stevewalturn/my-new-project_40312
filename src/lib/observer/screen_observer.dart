@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app_123/app/app.locator.dart';
 import 'package:my_app_123/services/analytic_service.dart';
 
 /// The [ScreenObserver] is a [NavigatorObserver] that
@@ -6,7 +7,7 @@ import 'package:my_app_123/services/analytic_service.dart';
 class ScreenObserver extends NavigatorObserver {
   ScreenObserver();
 
-  // final _analyticService = locator<AnalyticService>();
+  final _analyticService = locator<AnalyticService>();
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
@@ -37,6 +38,7 @@ class ScreenObserver extends NavigatorObserver {
   void _trackScreenView(Route<dynamic> route) {
     final screenName = _defaultNameExtractor(route.settings);
     if (screenName != null) {
+      // Uncomment when analytics tracking is needed
       // _analyticService.trackScreen(screenName);
     }
   }
