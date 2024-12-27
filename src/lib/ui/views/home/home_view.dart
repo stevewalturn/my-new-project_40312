@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:my_app_123/ui/common/app_colors.dart';
 import 'package:my_app_123/ui/views/home/home_viewmodel.dart';
+import 'package:my_app_123/ui/widgets/home_action_buttons.dart';
+import 'package:my_app_123/ui/widgets/home_header.dart';
+import 'package:my_app_123/ui/widgets/home_stats_widget.dart';
 import 'package:stacked/stacked.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
@@ -13,63 +17,48 @@ class HomeView extends StackedView<HomeViewModel> {
     Widget? child,
   ) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Gap(50),
-                Column(
-                  children: [
-                    const Text(
-                      'Hello from STEVE x STACKED!',
-                      style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    const Gap(25),
-                    MaterialButton(
-                      color: Colors.black,
-                      onPressed: viewModel.incrementCounter,
-                      child: Text(
-                        viewModel.counterLabel,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HomeHeader(username: viewModel.username),
+              const Gap(20),
+              HomeStatsWidget(counter: viewModel.counter),
+              const Gap(20),
+              Text(
+                'Quick Actions',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: kcDarkGreyColor,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MaterialButton(
-                      color: Colors.grey,
-                      onPressed: viewModel.showDialog,
-                      child: const Text(
-                        'Show Dialog',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    MaterialButton(
-                      color: Colors.grey,
-                      onPressed: viewModel.showBottomSheet,
-                      child: const Text(
-                        'Show Bottom Sheet',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
+              ),
+              const Gap(12),
+              HomeActionButtons(
+                onShowDialog: viewModel.showDialog,
+                onShowBottomSheet: viewModel.showBottomSheet,
+              ),
+              if (viewModel.hasError) ...[
+                const Gap(20),
+                Text(
+                  viewModel.modelError.toString(),
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                  ),
                 ),
               ],
-            ),
+            ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: kcPrimaryColor,
+        onPressed: viewModel.incrementCounter,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

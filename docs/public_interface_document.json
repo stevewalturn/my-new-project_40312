@@ -1,7 +1,7 @@
 {
   "package_name": "com.mycompany.my_app_123",
-  "project_description": "The Flutter application follows the Stacked architecture, featuring routing, dependency injection, and dialog/bottom sheet management. It includes a startup screen, a home screen with a counter, a dialog, and a bottom sheet. The application also integrates with Firebase for analytics tracking and supports localization and multiple flavors (development and production).",
-  "architecture_overview": "The application is structured using the Stacked architecture, which separates the concerns of the UI, view models, and services. It uses Stacked for state management, routing, and dependency injection. The main components include the App, AppView, and various feature-specific views and view models. The application also utilizes services for managing dialogs, bottom sheets, and navigation, as well as observing screen transitions for analytics purposes.",
+  "project_description": "The Flutter application is a multi-feature mobile app built using the Stacked architecture, with a focus on modular design, dependency injection, and comprehensive service management. It provides a startup screen, home screen with counter functionality, custom dialog and bottom sheet interactions, and supports multiple app flavors (development and production) with Firebase integration and localization.",
+  "architecture_overview": "Implemented using Stacked architecture, the application follows a clean MVVM (Model-View-ViewModel) pattern. It utilizes dependency injection through app.locator.dart, custom routing via app.router.dart, and centralized service management. The architecture separates concerns between UI components, view models, and services, enabling scalable and maintainable code structure.",
   "files": [
     {
       "name": "lib/app/app.dart",
@@ -840,6 +840,94 @@
         "package:stacked/stacked.dart",
         "package:stacked_services/stacked_services.dart"
       ]
+    },
+    {
+      "name": "lib/ui/widgets/home_feature_card.dart",
+      "description": "A reusable Flutter widget that represents a feature card in the home screen, displaying an icon, title, and description with an interactive tap behavior",
+      "class_diagram": "@startuml\nclass HomeFeatureCard {\n  -String title\n  -String description\n  -IconData icon\n  -VoidCallback onTap\n  +Widget build(BuildContext context)\n}\n@enduml",
+      "methods": [
+        {
+          "name": "build",
+          "description": "Creates a card widget with an icon, title, and description that can be tapped to trigger an action",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "Widget"
+        }
+      ],
+      "dependencies": [
+        "package:flutter/material.dart",
+        "package:my_app_123/ui/common/app_colors.dart",
+        "package:my_app_123/ui/common/ui_helpers.dart"
+      ]
+    },
+    {
+      "name": "lib/ui/widgets/home_header.dart",
+      "description": "A reusable widget that displays a personalized header for the home screen, showing the user's welcome message and a circular avatar with their first initial",
+      "class_diagram": "@startuml\nclass HomeHeader {\n  -String username\n  +build(BuildContext context): Widget\n}\n@enduml",
+      "methods": [
+        {
+          "name": "build",
+          "description": "Constructs the home header widget with a welcome message and user avatar",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "Widget"
+        }
+      ],
+      "dependencies": [
+        "package:flutter/material.dart",
+        "package:my_app_123/ui/common/app_colors.dart",
+        "package:my_app_123/ui/common/ui_helpers.dart"
+      ]
+    },
+    {
+      "name": "lib/ui/widgets/home_stats_widget.dart",
+      "description": "A Flutter widget that displays user statistics in a visually appealing card format, showing a counter and calculated level based on the counter value",
+      "class_diagram": "@startuml\nclass HomeStatsWidget {\n  -int counter\n  +Widget build(BuildContext context)\n}\nclass _StatItem {\n  -String title\n  -String value\n  -IconData icon\n  -Color color\n  +Widget build(BuildContext context)\n}\n@enduml",
+      "methods": [
+        {
+          "name": "build",
+          "description": "Constructs the main stats widget with a title and two stat items (counter and level)",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "Widget"
+        },
+        {
+          "name": "_StatItem.build",
+          "description": "Creates an individual stat item with an icon, value, and title",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "Widget"
+        }
+      ],
+      "dependencies": [
+        "flutter/material.dart",
+        "ui/common/app_colors.dart",
+        "ui/common/ui_helpers.dart"
+      ]
+    },
+    {
+      "name": "lib/ui/widgets/home_action_buttons.dart",
+      "description": "A reusable UI widget that renders two action buttons (Info and Sheet) for the home screen, allowing users to trigger dialog or bottom sheet interactions with customizable styling and behavior",
+      "class_diagram": "@startuml\nclass HomeActionButtons {\n  -VoidCallback onShowDialog\n  -VoidCallback onShowBottomSheet\n  +build(context)\n}\nclass _ActionButton {\n  -IconData icon\n  -String title\n  -Color color\n  -VoidCallback onTap\n  +build(context)\n}\nHomeActionButtons o-- _ActionButton\n@enduml",
+      "methods": [
+        {
+          "name": "build",
+          "description": "Creates a row of two expandable action buttons with customizable icons, colors, and tap behaviors",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "Widget"
+        }
+      ],
+      "dependencies": [
+        "package:flutter/material.dart",
+        "package:my_app_123/ui/common/app_colors.dart",
+        "package:my_app_123/ui/common/ui_helpers.dart"
+      ]
     }
   ],
   "dependencies": [
@@ -864,7 +952,7 @@
       "purpose": "Creating gaps in layouts"
     }
   ],
-  "sequence_diagram": "@startuml\nactor User\nparticipant main\nparticipant AppView\nparticipant StartupView\nparticipant StartupViewModel\nparticipant HomeView\nparticipant HomeViewModel\n\nUser -> main: Launch app\nmain -> AppView: Create and run\nAppView -> StartupView: Initialize\nStartupView -> StartupViewModel: Run startup logic\nStartupViewModel -> HomeView: Navigate on completion\nHomeView -> HomeViewModel: Initialize\nUser -> HomeView: Interact\nHomeView -> HomeViewModel: Handle user actions\nHomeViewModel -> HomeView: Update UI\nHomeViewModel -> DialogService: Show dialog\nHomeViewModel -> BottomSheetService: Show bottom sheet\n@enduml",
-  "state_management_flow": "The application uses the Stacked architecture for state management. Each view has a corresponding ViewModel that handles the business logic and state for that view. The ViewModels are responsible for updating the UI, interacting with services (e.g., DialogService, BottomSheetService), and managing the application's overall state. The app.locator.dart file sets up the necessary dependency injections, allowing the ViewModels to access the required services.",
-  "navigation_flow": "The application's navigation is managed using the Stacked Router, defined in app.router.dart. The main entry point is the AppView, which initializes the Stacked architecture and displays the StartupView. After the startup logic is completed, the StartupViewModel navigates to the HomeView. The HomeView allows the user to interact with the application, triggering updates to the HomeViewModel, which in turn updates the UI and can show dialogs or bottom sheets as needed."
+  "sequence_diagram": "@startuml\nactor User\nparticipant App\nparticipant StartupView\nparticipant StartupViewModel\nparticipant HomeView\nparticipant HomeViewModel\nparticipant DialogService\nparticipant BottomSheetService\n\nUser -> App: Launch Application\nApp -> StartupView: Initialize Startup Screen\nStartupView -> StartupViewModel: Execute Startup Logic\nStartupViewModel -> HomeView: Navigate after 3 Seconds\nHomeView -> HomeViewModel: Initialize Home Screen\nUser -> HomeView: Interact with Counter\nHomeViewModel -> HomeView: Update Counter UI\nUser -> HomeView: Show Dialog\nHomeView -> DialogService: Trigger Info Alert Dialog\nUser -> HomeView: Show Bottom Sheet\nHomeView -> BottomSheetService: Display Notice Bottom Sheet\n@enduml",
+  "state_management_flow": "State management is implemented using the Stacked framework's ViewModel approach. Each view (HomeView, StartupView) has a corresponding ViewModel responsible for managing its state, business logic, and interactions. ViewModels handle user actions, update the UI, and coordinate with services like DialogService and BottomSheetService. The app.locator.dart manages dependency injection, enabling seamless service access across the application.",
+  "navigation_flow": "Navigation is managed through the Stacked Router defined in app.router.dart. The application follows a structured flow: the app starts with the StartupView, which after a brief delay navigates to the HomeView using NavigationService. The HomeViewModel provides methods for navigation-related actions, such as showing dialogs and bottom sheets, ensuring a clean and modular approach to screen transitions and user interactions."
 }
