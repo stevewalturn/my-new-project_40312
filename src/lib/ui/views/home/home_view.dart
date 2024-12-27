@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:my_app_123/ui/common/app_colors.dart';
 import 'package:my_app_123/ui/views/home/home_viewmodel.dart';
 import 'package:my_app_123/ui/widgets/home_action_buttons.dart';
+import 'package:my_app_123/ui/widgets/home_feature_card.dart';
 import 'package:my_app_123/ui/widgets/home_header.dart';
 import 'package:my_app_123/ui/widgets/home_stats_widget.dart';
 import 'package:stacked/stacked.dart';
@@ -40,6 +41,13 @@ class HomeView extends StackedView<HomeViewModel> {
               HomeActionButtons(
                 onShowDialog: viewModel.showDialog,
                 onShowBottomSheet: viewModel.showBottomSheet,
+              ),
+              const Gap(20),
+              HomeFeatureCard(
+                title: 'Patient Records',
+                description: 'View and manage patient records',
+                icon: Icons.medical_services,
+                onTap: viewModel.navigateToPatientRecords,
               ),
               if (viewModel.hasError) ...[
                 const Gap(20),

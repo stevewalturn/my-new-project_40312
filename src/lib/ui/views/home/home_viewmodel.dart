@@ -1,12 +1,14 @@
 import 'package:my_app_123/app/app.bottomsheets.dart';
 import 'package:my_app_123/app/app.dialogs.dart';
 import 'package:my_app_123/app/app.locator.dart';
+import 'package:my_app_123/app/app.router.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class HomeViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
   final _bottomSheetService = locator<BottomSheetService>();
+  final _navigationService = locator<NavigationService>();
 
   String get username => 'Steve';
   int get counter => _counter;
@@ -16,6 +18,14 @@ class HomeViewModel extends BaseViewModel {
   void incrementCounter() {
     _counter++;
     rebuildUi();
+  }
+
+  void navigateToPatientRecords() {
+    try {
+      _navigationService.navigateToPatientView();
+    } catch (e) {
+      setError('Failed to navigate to patient records. Please try again.');
+    }
   }
 
   void showDialog() {
@@ -35,8 +45,8 @@ class HomeViewModel extends BaseViewModel {
       _bottomSheetService.showCustomSheet(
         variant: BottomSheetType.notice,
         title: 'Your Progress',
-        description: 'You\'ve clicked the counter $_counter times! '
-            'Keep going to reach the next level!',
+        description:
+            'You\'ve clicked the counter $_counter times! Keep going to reach the next level!',
       );
     } catch (e) {
       setError('Failed to show bottom sheet. Please try again.');
