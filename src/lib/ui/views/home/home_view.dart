@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:my_app_123/ui/common/app_colors.dart';
 import 'package:my_app_123/ui/views/home/home_viewmodel.dart';
+import 'package:my_app_123/ui/views/home/widgets/action_button.dart';
+import 'package:my_app_123/ui/views/home/widgets/feature_card.dart';
+import 'package:my_app_123/ui/views/home/widgets/home_header.dart';
 import 'package:stacked/stacked.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
@@ -13,70 +17,62 @@ class HomeView extends StackedView<HomeViewModel> {
     Widget? child,
   ) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Gap(50),
-                Column(
-                  children: [
-                    const Text(
-                      'Hello from STEVE x STACKED!',
-                      style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    const Gap(25),
-                    MaterialButton(
-                      color: Colors.black,
-                      onPressed: viewModel.incrementCounter,
-                      child: Text(
-                        viewModel.counterLabel,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(40),
+              const HomeHeader(),
+              const Gap(40),
+              Text(
+                'Features',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: kcMediumGrey,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MaterialButton(
-                      color: Colors.grey,
-                      onPressed: viewModel.showDialog,
-                      child: const Text(
-                        'Show Dialog',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    MaterialButton(
-                      color: Colors.grey,
-                      onPressed: viewModel.showBottomSheet,
-                      child: const Text(
-                        'Show Bottom Sheet',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
+              ),
+              const Gap(20),
+              ...viewModel.features.map(
+                (feature) => Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: FeatureCard(
+                    title: feature.title,
+                    description: feature.description,
+                    icon: feature.icon,
+                  ),
                 ),
-              ],
-            ),
+              ),
+              const Gap(40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ActionButton(
+                    title: 'Show Dialog',
+                    onTap: viewModel.showDialog,
+                  ),
+                  ActionButton(
+                    title: 'Show Bottom Sheet',
+                    onTap: viewModel.showBottomSheet,
+                  ),
+                ],
+              ),
+              const Gap(40),
+            ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: kcPrimaryColor,
+        onPressed: viewModel.incrementCounter,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
   @override
-  HomeViewModel viewModelBuilder(
-    BuildContext context,
-  ) =>
-      HomeViewModel();
+  HomeViewModel viewModelBuilder(BuildContext context) => HomeViewModel();
 }
