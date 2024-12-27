@@ -1,7 +1,7 @@
 {
   "package_name": "com.mycompany.my_app_123",
-  "project_description": "The Flutter application is a multi-feature mobile app built using the Stacked architecture, with a focus on modular design, dependency injection, and comprehensive service management. It provides a startup screen, home screen with counter functionality, custom dialog and bottom sheet interactions, and supports multiple app flavors (development and production) with Firebase integration and localization.",
-  "architecture_overview": "Implemented using Stacked architecture, the application follows a clean MVVM (Model-View-ViewModel) pattern. It utilizes dependency injection through app.locator.dart, custom routing via app.router.dart, and centralized service management. The architecture separates concerns between UI components, view models, and services, enabling scalable and maintainable code structure.",
+  "project_description": "A multi-feature Flutter mobile application built using Stacked architecture, providing a comprehensive user experience with counter functionality, custom dialogs, bottom sheets, Firebase integration, and localization support. The app includes startup and home screens with modular design and dependency injection.",
+  "architecture_overview": "Implemented using Stacked MVVM architecture, the application leverages dependency injection, centralized service management, and a clean, modular code structure. Key components include ViewModels for state management, services for cross-cutting concerns, and a robust routing system that enables scalable and maintainable application development.",
   "files": [
     {
       "name": "lib/app/app.dart",
@@ -928,6 +928,276 @@
         "package:my_app_123/ui/common/app_colors.dart",
         "package:my_app_123/ui/common/ui_helpers.dart"
       ]
+    },
+    {
+      "name": "lib/utils/extensions/patient_record_extension.dart",
+      "description": "A utility extension for the PatientRecord model that provides additional formatting and search functionality, enhancing the readability and searchability of patient records",
+      "class_diagram": "@startuml\nclass PatientRecordExtension {\n  + formattedDate: String\n  + ageDisplay: String\n  + summary: String\n  + matchesSearch(query: String): bool\n}\n@enduml",
+      "methods": [
+        {
+          "name": "formattedDate",
+          "description": "Converts the record date into a human-readable format (dd MMM yyyy)",
+          "parameters": null,
+          "return_type": "String"
+        },
+        {
+          "name": "ageDisplay",
+          "description": "Generates a formatted age string with 'years old' suffix",
+          "parameters": null,
+          "return_type": "String"
+        },
+        {
+          "name": "summary",
+          "description": "Creates a concise summary of the patient record by combining name and condition",
+          "parameters": null,
+          "return_type": "String"
+        },
+        {
+          "name": "matchesSearch",
+          "description": "Performs a case-insensitive search across patient name, condition, and notes",
+          "parameters": [
+            "query"
+          ],
+          "return_type": "bool"
+        }
+      ],
+      "dependencies": [
+        "package:my_app_123/models/patient_record.dart",
+        "package:intl/intl.dart"
+      ]
+    },
+    {
+      "name": "lib/ui/views/patient/patient_view.dart",
+      "description": "A Flutter view responsible for displaying and managing patient records with search, listing, and CRUD functionality",
+      "class_diagram": "@startuml\nclass PatientView {\n  +builder(BuildContext, PatientViewModel)\n  +viewModelBuilder(BuildContext)\n  +onViewModelReady(PatientViewModel)\n}\n@enduml",
+      "methods": [
+        {
+          "name": "builder",
+          "description": "Constructs the main UI for patient records view with search, list of records, and floating action button",
+          "parameters": [
+            "BuildContext",
+            "PatientViewModel",
+            "Widget?"
+          ],
+          "return_type": "Widget"
+        },
+        {
+          "name": "viewModelBuilder",
+          "description": "Creates an instance of PatientViewModel for managing patient record state and logic",
+          "parameters": [
+            "BuildContext"
+          ],
+          "return_type": "PatientViewModel"
+        },
+        {
+          "name": "onViewModelReady",
+          "description": "Initializes the PatientViewModel when the view is first loaded",
+          "parameters": [
+            "PatientViewModel"
+          ],
+          "return_type": null
+        }
+      ],
+      "dependencies": [
+        "package:flutter/material.dart",
+        "package:stacked/stacked.dart",
+        "patient_viewmodel.dart",
+        "patient_record_card.dart",
+        "patient_record_form.dart",
+        "app_colors.dart",
+        "ui_helpers.dart"
+      ]
+    },
+    {
+      "name": "lib/models/patient_record.dart",
+      "description": "Defines a data model for patient medical records, representing essential patient information and providing JSON serialization/deserialization capabilities",
+      "class_diagram": "@startuml\nclass PatientRecord {\n  +id: String\n  +name: String\n  +age: int\n  +gender: String\n  +condition: String\n  +recordDate: DateTime\n  +notes: String\n  +copyWith(): PatientRecord\n  +toJson(): Map<String, dynamic>\n  +fromJson(): PatientRecord\n}\n@enduml",
+      "methods": [
+        {
+          "name": "copyWith",
+          "description": "Creates a new PatientRecord instance with optional field overrides, enabling immutable updates",
+          "parameters": [
+            "id",
+            "name",
+            "age",
+            "gender",
+            "condition",
+            "recordDate",
+            "notes"
+          ],
+          "return_type": "PatientRecord"
+        },
+        {
+          "name": "toJson",
+          "description": "Converts PatientRecord to a JSON-compatible map for data persistence or network transmission",
+          "parameters": null,
+          "return_type": "Map<String, dynamic>"
+        },
+        {
+          "name": "fromJson",
+          "description": "Creates a PatientRecord instance from a JSON map, enabling deserialization",
+          "parameters": [
+            "json"
+          ],
+          "return_type": "PatientRecord"
+        }
+      ],
+      "dependencies": [
+        "package:equatable/equatable.dart"
+      ]
+    },
+    {
+      "name": "lib/ui/widgets/patient_record_form.dart",
+      "description": "A reusable form widget for creating and editing patient records in a medical application, providing a comprehensive input interface for capturing patient details",
+      "class_diagram": "@startuml\nclass PatientRecordForm {\n  - initialRecord: PatientRecord\n  - onSubmit: Function(PatientRecord)\n  + createState(): _PatientRecordFormState\n}\nclass _PatientRecordFormState {\n  - _formKey: GlobalKey<FormState>\n  - _nameController: TextEditingController\n  - _submitForm(): void\n  + build(): Widget\n}\n@enduml",
+      "methods": [
+        {
+          "name": "_submitForm",
+          "description": "Validates form inputs and creates a new PatientRecord object to be submitted",
+          "parameters": null,
+          "return_type": "void"
+        },
+        {
+          "name": "build",
+          "description": "Constructs the patient record form with input fields for name, age, gender, condition, and notes",
+          "parameters": null,
+          "return_type": "Widget"
+        },
+        {
+          "name": "initState",
+          "description": "Initializes form controllers with optional existing patient record data",
+          "parameters": null,
+          "return_type": "void"
+        }
+      ],
+      "dependencies": [
+        "package:flutter/material.dart",
+        "package:my_app_123/models/patient_record.dart",
+        "package:my_app_123/ui/common/app_colors.dart",
+        "package:my_app_123/ui/common/ui_helpers.dart"
+      ]
+    },
+    {
+      "name": "lib/ui/views/patient/patient_viewmodel.dart",
+      "description": "A ViewModel for managing patient records, providing functionality for loading, searching, adding, editing, and deleting patient records using shared preferences and following the MVVM architecture",
+      "class_diagram": "@startuml\nclass PatientViewModel {\n  -_sharedPreferencesService: SharedPreferencesService\n  -_navigationService: NavigationService\n  -_dialogService: DialogService\n  -_allRecords: List<PatientRecord>\n  -_searchQuery: String\n  +filteredRecords: List<PatientRecord>\n  +hasRecords: bool\n  +initialize(): Future<void>\n  +setSearchQuery(query: String): void\n  +showAddRecord(): Future<void>\n  +showEditRecord(record: PatientRecord): Future<void>\n  +deleteRecord(id: String): Future<void>\n}\n@enduml",
+      "methods": [
+        {
+          "name": "initialize",
+          "description": "Initial loading of patient records from shared preferences",
+          "parameters": null,
+          "return_type": "Future<void>"
+        },
+        {
+          "name": "setSearchQuery",
+          "description": "Updates search query and filters patient records",
+          "parameters": [
+            "query: String"
+          ],
+          "return_type": "void"
+        },
+        {
+          "name": "showAddRecord",
+          "description": "Displays dialog to add a new patient record",
+          "parameters": null,
+          "return_type": "Future<void>"
+        },
+        {
+          "name": "showEditRecord",
+          "description": "Displays dialog to edit an existing patient record",
+          "parameters": [
+            "record: PatientRecord"
+          ],
+          "return_type": "Future<void>"
+        },
+        {
+          "name": "deleteRecord",
+          "description": "Deletes a patient record after user confirmation",
+          "parameters": [
+            "id: String"
+          ],
+          "return_type": "Future<void>"
+        }
+      ],
+      "dependencies": [
+        "stacked/stacked.dart",
+        "stacked_services/stacked_services.dart",
+        "my_app_123/app/app.locator.dart",
+        "my_app_123/models/patient_record.dart",
+        "my_app_123/services/shared_preferences_service.dart"
+      ]
+    },
+    {
+      "name": "lib/ui/widgets/patient_record_card.dart",
+      "description": "A Flutter widget that renders a patient record as a visually structured Card, displaying key patient information with edit and delete actions. It provides a standardized, user-friendly UI component for viewing patient details in a medical application.",
+      "class_diagram": "@startuml\nclass PatientRecordCard {\n  - record: PatientRecord\n  - onEdit: VoidCallback\n  - onDelete: VoidCallback\n  + build(): Widget\n}\nclass _InfoItem {\n  - label: String\n  - value: String\n  + build(): Widget\n}\nPatientRecordCard o-- _InfoItem\n@enduml",
+      "methods": [
+        {
+          "name": "build",
+          "description": "Constructs the visual layout for a patient record, displaying name, age, gender, condition, date, and optional notes with edit/delete actions",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "Widget"
+        }
+      ],
+      "dependencies": [
+        "flutter/material.dart",
+        "intl/intl.dart",
+        "my_app_123/models/patient_record.dart",
+        "my_app_123/ui/common/app_colors.dart",
+        "my_app_123/ui/common/ui_helpers.dart"
+      ]
+    },
+    {
+      "name": "lib/services/shared_preferences_service.dart",
+      "description": "A service for managing patient records using SharedPreferences, providing persistent local storage for patient data with CRUD operations",
+      "class_diagram": "@startuml\nclass SharedPreferencesService {\n  - _patientRecordsKey : String\n  + savePatientRecords(records: List<PatientRecord>)\n  + getPatientRecords(): List<PatientRecord>\n  + addPatientRecord(record: PatientRecord)\n  + updatePatientRecord(updatedRecord: PatientRecord)\n  + deletePatientRecord(id: String)\n}\n@enduml",
+      "methods": [
+        {
+          "name": "savePatientRecords",
+          "description": "Saves a list of patient records to local storage as JSON",
+          "parameters": [
+            "records"
+          ],
+          "return_type": "Future<void>"
+        },
+        {
+          "name": "getPatientRecords",
+          "description": "Retrieves all stored patient records from local storage",
+          "parameters": null,
+          "return_type": "Future<List<PatientRecord>>"
+        },
+        {
+          "name": "addPatientRecord",
+          "description": "Adds a new patient record to the existing list of records",
+          "parameters": [
+            "record"
+          ],
+          "return_type": "Future<void>"
+        },
+        {
+          "name": "updatePatientRecord",
+          "description": "Updates an existing patient record in the stored records list",
+          "parameters": [
+            "updatedRecord"
+          ],
+          "return_type": "Future<void>"
+        },
+        {
+          "name": "deletePatientRecord",
+          "description": "Removes a patient record from the stored records list by its ID",
+          "parameters": [
+            "id"
+          ],
+          "return_type": "Future<void>"
+        }
+      ],
+      "dependencies": [
+        "shared_preferences/shared_preferences.dart",
+        "my_app_123/models/patient_record.dart",
+        "stacked/stacked.dart"
+      ]
     }
   ],
   "dependencies": [
@@ -953,6 +1223,6 @@
     }
   ],
   "sequence_diagram": "@startuml\nactor User\nparticipant App\nparticipant StartupView\nparticipant StartupViewModel\nparticipant HomeView\nparticipant HomeViewModel\nparticipant DialogService\nparticipant BottomSheetService\n\nUser -> App: Launch Application\nApp -> StartupView: Initialize Startup Screen\nStartupView -> StartupViewModel: Execute Startup Logic\nStartupViewModel -> HomeView: Navigate after 3 Seconds\nHomeView -> HomeViewModel: Initialize Home Screen\nUser -> HomeView: Interact with Counter\nHomeViewModel -> HomeView: Update Counter UI\nUser -> HomeView: Show Dialog\nHomeView -> DialogService: Trigger Info Alert Dialog\nUser -> HomeView: Show Bottom Sheet\nHomeView -> BottomSheetService: Display Notice Bottom Sheet\n@enduml",
-  "state_management_flow": "State management is implemented using the Stacked framework's ViewModel approach. Each view (HomeView, StartupView) has a corresponding ViewModel responsible for managing its state, business logic, and interactions. ViewModels handle user actions, update the UI, and coordinate with services like DialogService and BottomSheetService. The app.locator.dart manages dependency injection, enabling seamless service access across the application.",
-  "navigation_flow": "Navigation is managed through the Stacked Router defined in app.router.dart. The application follows a structured flow: the app starts with the StartupView, which after a brief delay navigates to the HomeView using NavigationService. The HomeViewModel provides methods for navigation-related actions, such as showing dialogs and bottom sheets, ensuring a clean and modular approach to screen transitions and user interactions."
+  "state_management_flow": "State management is implemented using the Stacked framework's ViewModel approach. Each view has a corresponding ViewModel that manages its state, business logic, and user interactions. ViewModels handle user actions, update the UI, and coordinate with services like DialogService and BottomSheetService. Dependency injection through app.locator.dart enables seamless service access across the application, promoting a clean and modular state management strategy.",
+  "navigation_flow": "Navigation is managed through the Stacked Router defined in app.router.dart. The application follows a structured flow: starting with the StartupView, which navigates to the HomeView after a brief delay using NavigationService. The HomeViewModel provides methods for navigation-related actions like showing dialogs and bottom sheets, ensuring a clean and modular approach to screen transitions and user interactions."
 }
