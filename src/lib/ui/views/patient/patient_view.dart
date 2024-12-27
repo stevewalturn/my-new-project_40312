@@ -3,7 +3,6 @@ import 'package:my_app_123/ui/common/app_colors.dart';
 import 'package:my_app_123/ui/common/ui_helpers.dart';
 import 'package:my_app_123/ui/views/patient/patient_viewmodel.dart';
 import 'package:my_app_123/ui/widgets/patient_record_card.dart';
-import 'package:my_app_123/ui/widgets/patient_record_form.dart';
 import 'package:stacked/stacked.dart';
 
 class PatientView extends StackedView<PatientViewModel> {
