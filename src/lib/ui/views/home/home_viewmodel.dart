@@ -8,7 +8,8 @@ class HomeViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
   final _bottomSheetService = locator<BottomSheetService>();
 
-  String get counterLabel => 'Counter is: $_counter';
+  String get username => 'Steve';
+  int get counter => _counter;
 
   int _counter = 0;
 
@@ -18,18 +19,27 @@ class HomeViewModel extends BaseViewModel {
   }
 
   void showDialog() {
-    _dialogService.showCustomDialog(
-      variant: DialogType.infoAlert,
-      title: 'Steve Rocks!',
-      description: 'Give steve $_counter stars on Github',
-    );
+    try {
+      _dialogService.showCustomDialog(
+        variant: DialogType.infoAlert,
+        title: 'Counter Stats',
+        description: 'Current count: $_counter\nLevel: ${(_counter ~/ 10 + 1)}',
+      );
+    } catch (e) {
+      setError('Failed to show dialog. Please try again.');
+    }
   }
 
   void showBottomSheet() {
-    _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.notice,
-      title: 'title',
-      description: 'desc',
-    );
+    try {
+      _bottomSheetService.showCustomSheet(
+        variant: BottomSheetType.notice,
+        title: 'Your Progress',
+        description: 'You\'ve clicked the counter $_counter times! '
+            'Keep going to reach the next level!',
+      );
+    } catch (e) {
+      setError('Failed to show bottom sheet. Please try again.');
+    }
   }
 }
