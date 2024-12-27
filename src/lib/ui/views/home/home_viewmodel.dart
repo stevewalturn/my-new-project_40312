@@ -9,8 +9,31 @@ class HomeViewModel extends BaseViewModel {
   final _bottomSheetService = locator<BottomSheetService>();
 
   String get counterLabel => 'Counter is: $_counter';
-
   int _counter = 0;
+
+  List<FeatureItem> get features => [
+        FeatureItem(
+          title: 'Stacked Architecture',
+          description:
+              'This app uses Stacked Architecture for clean, maintainable code',
+          icon: '🏗️',
+        ),
+        FeatureItem(
+          title: 'State Management',
+          description: 'Built-in reactive state management for smooth updates',
+          icon: '⚡',
+        ),
+        FeatureItem(
+          title: 'Navigation',
+          description: 'Easy-to-use navigation with full type safety',
+          icon: '🧭',
+        ),
+        FeatureItem(
+          title: 'Service Layer',
+          description: 'Dedicated service layer for business logic separation',
+          icon: '🔧',
+        ),
+      ];
 
   void incrementCounter() {
     _counter++;
@@ -20,16 +43,28 @@ class HomeViewModel extends BaseViewModel {
   void showDialog() {
     _dialogService.showCustomDialog(
       variant: DialogType.infoAlert,
-      title: 'Steve Rocks!',
-      description: 'Give steve $_counter stars on Github',
+      title: 'Welcome to Stacked!',
+      description: 'This is a powerful architecture with $_counter features',
     );
   }
 
   void showBottomSheet() {
     _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.notice,
-      title: 'title',
-      description: 'desc',
+      title: 'Stacked Architecture',
+      description: 'Building scalable apps made easy',
     );
   }
+}
+
+class FeatureItem {
+  final String title;
+  final String description;
+  final String icon;
+
+  FeatureItem({
+    required this.title,
+    required this.description,
+    required this.icon,
+  });
 }
