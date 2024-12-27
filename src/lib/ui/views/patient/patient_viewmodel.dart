@@ -76,7 +76,8 @@ class PatientViewModel extends BaseViewModel {
     }
   }
 
-  Future<PatientRecord?> _showRecordDialog([PatientRecord? existingRecord]) async {
+  Future<PatientRecord?> _showRecordDialog(
+      [PatientRecord? existingRecord]) async {
     return showDialog<PatientRecord>(
       context: _navigationService.navigatorKey!.currentContext!,
       builder: (context) => Dialog(
