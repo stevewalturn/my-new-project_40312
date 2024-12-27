@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:my_app_123/app/app.locator.dart';
 import 'package:my_app_123/models/patient_record.dart';
 import 'package:my_app_123/services/shared_preferences_service.dart';
+import 'package:my_app_123/ui/widgets/patient_record_form.dart';
+import 'package:my_app_123/utils/extensions/patient_record_extension.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -74,8 +76,7 @@ class PatientViewModel extends BaseViewModel {
     }
   }
 
-  Future<PatientRecord?> _showRecordDialog(
-      [PatientRecord? existingRecord]) async {
+  Future<PatientRecord?> _showRecordDialog([PatientRecord? existingRecord]) async {
     return showDialog<PatientRecord>(
       context: _navigationService.navigatorKey!.currentContext!,
       builder: (context) => Dialog(
