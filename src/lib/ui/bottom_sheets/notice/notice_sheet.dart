@@ -6,13 +6,14 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class NoticeSheet extends StackedView<NoticeSheetModel> {
+  final Function(SheetResponse)? completer;
+  final SheetRequest request;
+
   const NoticeSheet({
     required this.completer,
     required this.request,
     super.key,
   });
-  final Function(SheetResponse)? completer;
-  final SheetRequest request;
 
   @override
   Widget builder(
@@ -33,13 +34,21 @@ class NoticeSheet extends StackedView<NoticeSheetModel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (viewModel.modelError != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Text(
+                viewModel.modelError.toString(),
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
           Text(
-            request.title!,
+            request.title ?? 'Notice',
             style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
           ),
           verticalSpaceTiny,
           Text(
-            request.description!,
+            request.description ?? '',
             style: const TextStyle(fontSize: 14, color: kcMediumGrey),
             maxLines: 3,
             softWrap: true,

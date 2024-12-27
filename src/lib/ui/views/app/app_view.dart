@@ -11,9 +11,22 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder.reactive(
+    return ViewModelBuilder<AppViewModel>.reactive(
       viewModelBuilder: AppViewModel.new,
-      builder: (_, __, ___) {
+      builder: (context, viewModel, child) {
+        if (viewModel.modelError != null) {
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: Text(
+                  'Error initializing app: ${viewModel.modelError.toString()}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+            ),
+          );
+        }
         return const _App();
       },
     );
@@ -31,10 +44,10 @@ class _App extends ViewModelWidget<AppViewModel> {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          /// Unfocus and hide keyboard when tap on white spaces
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: MaterialApp(
+          title: 'My App 123',
           initialRoute: Routes.startupView,
           onGenerateRoute: StackedRouter().onGenerateRoute,
           navigatorKey: StackedService.navigatorKey,
@@ -44,6 +57,16 @@ class _App extends ViewModelWidget<AppViewModel> {
           ],
           localizationsDelegates: localizationsDelegates,
           supportedLocales: supportedLocales,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          builder: (context, child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: child!,
+            );
+          },
         ),
       ),
     );

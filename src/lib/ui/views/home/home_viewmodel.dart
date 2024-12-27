@@ -13,23 +13,35 @@ class HomeViewModel extends BaseViewModel {
   int _counter = 0;
 
   void incrementCounter() {
-    _counter++;
-    rebuildUi();
+    try {
+      _counter++;
+      notifyListeners();
+    } catch (e) {
+      setError('Failed to increment counter');
+    }
   }
 
-  void showDialog() {
-    _dialogService.showCustomDialog(
-      variant: DialogType.infoAlert,
-      title: 'Steve Rocks!',
-      description: 'Give steve $_counter stars on Github',
-    );
+  Future<void> showDialog() async {
+    try {
+      await _dialogService.showCustomDialog(
+        variant: DialogType.infoAlert,
+        title: 'Steve Rocks!',
+        description: 'Give steve $_counter stars on Github',
+      );
+    } catch (e) {
+      setError('Failed to show dialog');
+    }
   }
 
-  void showBottomSheet() {
-    _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.notice,
-      title: 'title',
-      description: 'desc',
-    );
+  Future<void> showBottomSheet() async {
+    try {
+      await _bottomSheetService.showCustomSheet(
+        variant: BottomSheetType.notice,
+        title: 'Notice',
+        description: 'This is a notice bottom sheet',
+      );
+    } catch (e) {
+      setError('Failed to show bottom sheet');
+    }
   }
 }
