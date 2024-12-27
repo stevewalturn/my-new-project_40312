@@ -7,8 +7,7 @@ extension LocalizationsX on BuildContext {
   /// Retrieves the current [AppLocalizations].
   /// This is just syntactic sugar for the following:
   ///
-  /// ```dart
-  /// AppLocalizations.of(context);
-  /// ```
+  ///   /// AppLocalizations.of(context);
+  ///
   AppLocalizations get localizations => AppLocalizations.of(this);
 }
