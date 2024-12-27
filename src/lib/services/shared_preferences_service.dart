@@ -72,4 +72,30 @@ class SharedPreferencesService with ListenableServiceMixin {
       throw Exception('Failed to delete patient record: ${e.toString()}');
     }
   }
+
+  Future<void> saveData(String key, dynamic value) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final jsonString = jsonEncode(value);
+      await prefs.setString(key, jsonString);
+      notifyListeners();
+    } catch (e) {
+      throw Exception('Failed to save data: ${e.toString()}');
+    }
+  }
+
+  Future<dynamic> getData(String key) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final jsonString = prefs.getString(key);
+
+      if (jsonString == null) {
+        return null;
+      }
+
+      return jsonDecode(jsonString);
+    } catch (e) {
+      throw Exception('Failed to load data: ${e.toString()}');
+    }
+  }
 }

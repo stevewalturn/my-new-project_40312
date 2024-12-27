@@ -4,6 +4,7 @@ import 'package:my_app_123/ui/dialogs/info_alert/info_alert_dialog.dart';
 import 'package:my_app_123/ui/views/home/home_view.dart';
 import 'package:my_app_123/ui/views/patient/patient_view.dart';
 import 'package:my_app_123/ui/views/startup/startup_view.dart';
+import 'package:my_app_123/ui/views/tamagochi/tamagochi_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -12,6 +13,7 @@ import 'package:stacked_services/stacked_services.dart';
     MaterialRoute(page: HomeView),
     MaterialRoute(page: StartupView),
     MaterialRoute(page: PatientView),
+    MaterialRoute(page: TamagotchiView),
   ],
   dependencies: [
     LazySingleton(classType: BottomSheetService),

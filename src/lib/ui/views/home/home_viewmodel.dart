@@ -28,6 +28,14 @@ class HomeViewModel extends BaseViewModel {
     }
   }
 
+  void navigateToTamagotchi() {
+    try {
+      _navigationService.navigateToTamagotchiView();
+    } catch (e) {
+      setError('Failed to navigate to Tamagotchi. Please try again.');
+    }
+  }
+
   void showDialog() {
     try {
       _dialogService.showCustomDialog(

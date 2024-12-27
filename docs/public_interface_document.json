@@ -1,7 +1,7 @@
 {
   "package_name": "com.mycompany.my_app_123",
-  "project_description": "A multi-feature Flutter mobile application utilizing Stacked architecture, providing comprehensive functionality including a counter feature, patient record management, custom dialogs/bottom sheets, and Firebase integration. The app supports multiple environments, localization, and offers a modular, extensible design focused on maintainability.",
-  "architecture_overview": "The application leverages the Stacked MVVM architecture with a robust implementation of dependency injection, service-based design, and modular component organization. It implements a clean architectural pattern utilizing ViewModels for state management, services for cross-cutting concerns, and a scalable routing system that enables clear separation of concerns and extensible development.",
+  "project_description": "A multi-feature Flutter mobile application utilizing Stacked architecture, providing comprehensive functionality including counter features, patient record management, Tamagotchi game, custom dialogs/bottom sheets, and Firebase integration. The app supports multiple environments, localization, and offers a modular, extensible design focused on maintainability.",
+  "architecture_overview": "The application leverages the Stacked MVVM architecture with robust dependency injection, service-based design, and modular component organization. It implements a clean architectural pattern utilizing ViewModels for state management, services for cross-cutting concerns, and a scalable routing system that enables clear separation of concerns and extensible development.",
   "files": [
     {
       "name": "lib/app/app.dart",
@@ -1198,6 +1198,197 @@
         "my_app_123/models/patient_record.dart",
         "stacked/stacked.dart"
       ]
+    },
+    {
+      "name": "lib/ui/widgets/tamagochi_action_buttons.dart",
+      "description": "A custom widget that renders interactive action buttons for a Tamagotchi-style game, allowing users to feed, play with, and heal a virtual pet. The buttons are conditionally enabled based on the pet's alive status.",
+      "class_diagram": "@startuml\nclass TamagotchiActionButtons {\n  +onFeed: VoidCallback\n  +onPlay: VoidCallback\n  +onHeal: VoidCallback\n  +isAlive: bool\n  +build(context): Widget\n}\nclass _ActionButton {\n  +icon: IconData\n  +label: String\n  +color: Color\n  +onTap: VoidCallback\n  +build(context): Widget\n}\n@enduml",
+      "methods": [
+        {
+          "name": "build",
+          "description": "Renders a row of three action buttons for feeding, playing, and healing the Tamagotchi",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "Widget"
+        }
+      ],
+      "dependencies": [
+        "package:flutter/material.dart",
+        "package:my_app_123/ui/common/app_colors.dart",
+        "package:my_app_123/ui/common/ui_helpers.dart"
+      ]
+    },
+    {
+      "name": "lib/ui/widgets/tamagochi_status_card.dart",
+      "description": "A Flutter widget that displays the status and key metrics of a Tamagotchi, showing its vital attributes like hunger, happiness, and health in an interactive, visually appealing card format.",
+      "class_diagram": "@startuml\nclass TamagotchiStatusCard {\n  -Tamagotchi tamagotchi\n  +Widget build(BuildContext context)\n}\nclass _StatusBar {\n  -String label\n  -int value\n  -Color color\n  +Widget build(BuildContext context)\n}\n@enduml",
+      "methods": [
+        {
+          "name": "build",
+          "description": "Constructs the visual representation of a Tamagotchi's status with name, life status, and progress bars for key metrics",
+          "parameters": [
+            "BuildContext context"
+          ],
+          "return_type": "Widget"
+        }
+      ],
+      "dependencies": [
+        "flutter/material.dart",
+        "models/tamagochi.dart",
+        "ui/common/app_colors.dart",
+        "ui/common/ui_helpers.dart"
+      ]
+    },
+    {
+      "name": "lib/models/tamagochi.dart",
+      "description": "A data model representing a Tamagotchi virtual pet, tracking its core attributes like hunger, happiness, and health, with methods for creation, serialization, and immutable state updates",
+      "class_diagram": "@startuml\nclass Tamagotchi {\n  +String id\n  +String name\n  +int hunger\n  +int happiness\n  +int health\n  +DateTime lastFed\n  +DateTime lastPlayed\n  +bool isAlive\n\n  +copyWith()\n  +create(String name)\n  +toJson()\n  +fromJson()\n}\n@enduml",
+      "methods": [
+        {
+          "name": "copyWith",
+          "description": "Creates a new Tamagotchi instance with optional updated properties, enabling immutable state updates",
+          "parameters": [
+            "id",
+            "name",
+            "hunger",
+            "happiness",
+            "health",
+            "lastFed",
+            "lastPlayed",
+            "isAlive"
+          ],
+          "return_type": "Tamagotchi"
+        },
+        {
+          "name": "create",
+          "description": "Factory method to initialize a new Tamagotchi with default starting attributes",
+          "parameters": [
+            "name"
+          ],
+          "return_type": "Tamagotchi"
+        },
+        {
+          "name": "toJson",
+          "description": "Converts Tamagotchi instance to a JSON-serializable map for storage or transmission",
+          "parameters": null,
+          "return_type": "Map<String, dynamic>"
+        },
+        {
+          "name": "fromJson",
+          "description": "Creates a Tamagotchi instance from a JSON map, enabling deserialization",
+          "parameters": [
+            "json"
+          ],
+          "return_type": "Tamagotchi"
+        }
+      ],
+      "dependencies": [
+        "package:equatable/equatable.dart"
+      ]
+    },
+    {
+      "name": "lib/ui/views/tamagochi/tamagochi_viewmodel.dart",
+      "description": "A ViewModel for managing a Tamagotchi virtual pet, responsible for handling the pet's lifecycle, interactions, state management, and persistence using SharedPreferences",
+      "class_diagram": "@startuml\nclass TamagotchiViewModel {\n  -_sharedPreferencesService: SharedPreferencesService\n  -_dialogService: DialogService\n  -_tamagotchi: Tamagotchi\n  +initialize(): Future<void>\n  +createNewTamagotchi(name: String): Future<void>\n  +feed(): Future<void>\n  +play(): Future<void>\n  +heal(): Future<void>\n}\n@enduml",
+      "methods": [
+        {
+          "name": "initialize",
+          "description": "Load existing Tamagotchi from SharedPreferences or set up initial state",
+          "parameters": null,
+          "return_type": "Future<void>"
+        },
+        {
+          "name": "createNewTamagotchi",
+          "description": "Create a new Tamagotchi with the specified name and save it",
+          "parameters": [
+            "name"
+          ],
+          "return_type": "Future<void>"
+        },
+        {
+          "name": "feed",
+          "description": "Increase the Tamagotchi's hunger level and update last fed time",
+          "parameters": null,
+          "return_type": "Future<void>"
+        },
+        {
+          "name": "play",
+          "description": "Increase the Tamagotchi's happiness level and update last played time",
+          "parameters": null,
+          "return_type": "Future<void>"
+        },
+        {
+          "name": "heal",
+          "description": "Increase the Tamagotchi's health level",
+          "parameters": null,
+          "return_type": "Future<void>"
+        }
+      ],
+      "dependencies": [
+        "stacked",
+        "stacked_services",
+        "shared_preferences_service",
+        "tamagotchi_model"
+      ]
+    },
+    {
+      "name": "lib/ui/views/tamagochi/tamagochi_view.dart",
+      "description": "A Flutter view for managing a Tamagotchi game experience, allowing users to create, interact with, and monitor the status of a virtual pet",
+      "class_diagram": "@startuml\nclass TamagotchiView {\n  +builder(context: BuildContext, viewModel: TamagotchiViewModel)\n  -_buildContent(context: BuildContext, viewModel: TamagotchiViewModel)\n  -_buildCreateNew(context: BuildContext, viewModel: TamagotchiViewModel)\n  +viewModelBuilder(context: BuildContext)\n  +onViewModelReady(viewModel: TamagotchiViewModel)\n}\n@enduml",
+      "methods": [
+        {
+          "name": "builder",
+          "description": "Primary method for rendering the Tamagotchi view, handling loading and content states",
+          "parameters": [
+            "BuildContext",
+            "TamagotchiViewModel",
+            "Widget?"
+          ],
+          "return_type": "Widget"
+        },
+        {
+          "name": "_buildContent",
+          "description": "Constructs the main content view for an existing Tamagotchi, showing status and action buttons",
+          "parameters": [
+            "BuildContext",
+            "TamagotchiViewModel"
+          ],
+          "return_type": "Widget"
+        },
+        {
+          "name": "_buildCreateNew",
+          "description": "Renders the initial screen for creating a new Tamagotchi with name input",
+          "parameters": [
+            "BuildContext",
+            "TamagotchiViewModel"
+          ],
+          "return_type": "Widget"
+        },
+        {
+          "name": "viewModelBuilder",
+          "description": "Creates the ViewModel instance for managing Tamagotchi state and logic",
+          "parameters": [
+            "BuildContext"
+          ],
+          "return_type": "TamagotchiViewModel"
+        },
+        {
+          "name": "onViewModelReady",
+          "description": "Initializes the Tamagotchi when the view is first loaded",
+          "parameters": [
+            "TamagotchiViewModel"
+          ],
+          "return_type": null
+        }
+      ],
+      "dependencies": [
+        "flutter/material.dart",
+        "stacked/stacked.dart",
+        "tamagochi_viewmodel.dart",
+        "tamagochi_status_card.dart",
+        "tamagochi_action_buttons.dart"
+      ]
     }
   ],
   "dependencies": [
@@ -1222,7 +1413,7 @@
       "purpose": "Creating gaps in layouts"
     }
   ],
-  "sequence_diagram": "@startuml\nactor User\nparticipant App\nparticipant StartupView\nparticipant HomeView\nparticipant PatientView\nparticipant DialogService\nparticipant SharedPreferencesService\n\nUser -> App: Launch Application\nApp -> StartupView: Initialize Startup Screen\nStartupView -> HomeView: Navigate\nUser -> HomeView: Interact with Counter/Dialogs\nUser -> HomeView: Navigate to Patient Records\nHomeView -> PatientView: Switch Screens\nUser -> PatientView: Search/Add/Edit Records\nPatientView -> SharedPreferencesService: Manage Patient Records\nUser -> PatientView: Perform CRUD Operations\n@enduml",
-  "state_management_flow": "Utilizes Stacked framework's ViewModel pattern for reactive state management. Each view (HomeView, PatientView) has a dedicated ViewModel managing its state, user interactions, and service communication. ViewModels handle data updates, trigger UI rebuilds, and coordinate with services like SharedPreferencesService, DialogService. Dependency injection through app.locator.dart enables efficient service access and promotes a clean, decoupled state management approach.",
-  "navigation_flow": "Implemented via Stacked Router with a structured navigation hierarchy. The app follows a defined navigation flow from StartupView to HomeView, with additional routes like PatientView. NavigationService manages screen transitions, enabling programmatic navigation between views. Each ViewModel contains methods for navigation actions, supporting a modular approach to screen management and user interaction flows."
+  "sequence_diagram": "@startuml\nactor User\nparticipant App\nparticipant StartupView\nparticipant HomeView\nparticipant PatientView\nparticipant TamagotchiView\nparticipant DialogService\nparticipant SharedPreferencesService\n\nUser -> App: Launch Application\nApp -> StartupView: Initialize Startup Screen\nStartupView -> HomeView: Navigate\nUser -> HomeView: Interact with Counter/Features\nUser -> HomeView: Navigate to Patient Records\nHomeView -> PatientView: Switch Screens\nUser -> PatientView: Search/Add/Edit Records\nPatientView -> SharedPreferencesService: Manage Patient Records\nUser -> HomeView: Switch to Tamagotchi Game\nHomeView -> TamagotchiView: Navigate\nUser -> TamagotchiView: Create/Interact with Virtual Pet\nTamagotchiView -> SharedPreferencesService: Manage Pet State\n@enduml",
+  "state_management_flow": "Leverages Stacked framework's MVVM pattern for reactive state management. Each feature (Home, Patient Records, Tamagotchi) has a dedicated ViewModel managing its state, user interactions, and service communication. ViewModels handle data updates, trigger UI rebuilds, and coordinate with services like SharedPreferencesService and DialogService. Dependency injection through app.locator.dart enables efficient service access and promotes a clean, decoupled state management approach.",
+  "navigation_flow": "Implemented via Stacked Router with a structured navigation hierarchy. The application follows a defined navigation flow from StartupView to HomeView, with additional routes like PatientView and TamagotchiView. NavigationService manages screen transitions, enabling programmatic navigation between views. Each ViewModel contains methods for navigation actions, supporting a modular approach to screen management and user interaction flows."
 }
