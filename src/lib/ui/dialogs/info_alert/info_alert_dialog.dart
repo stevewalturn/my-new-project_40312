@@ -8,13 +8,14 @@ import 'package:stacked_services/stacked_services.dart';
 const double _graphicSize = 60;
 
 class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
+  final DialogRequest request;
+  final Function(DialogResponse) completer;
+
   const InfoAlertDialog({
     required this.request,
     required this.completer,
     super.key,
   });
-  final DialogRequest request;
-  final Function(DialogResponse) completer;
 
   @override
   Widget builder(
@@ -30,6 +31,15 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (viewModel.modelError != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Text(
+                  viewModel.modelError.toString(),
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -39,7 +49,7 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        request.title!,
+                        request.title ?? 'Information',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w900,
@@ -47,7 +57,7 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
                       ),
                       verticalSpaceTiny,
                       Text(
-                        request.description!,
+                        request.description ?? '',
                         style:
                             const TextStyle(fontSize: 14, color: kcMediumGrey),
                         maxLines: 3,
@@ -75,11 +85,7 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
             ),
             verticalSpaceMedium,
             GestureDetector(
-              onTap: () => completer(
-                DialogResponse(
-                  confirmed: true,
-                ),
-              ),
+              onTap: () => completer(DialogResponse(confirmed: true)),
               child: Container(
                 height: 50,
                 width: double.infinity,
