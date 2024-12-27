@@ -49,6 +49,13 @@ class HomeView extends StackedView<HomeViewModel> {
                 icon: Icons.medical_services,
                 onTap: viewModel.navigateToPatientRecords,
               ),
+              const Gap(12),
+              HomeFeatureCard(
+                title: 'Tamagotchi',
+                description: 'Take care of your virtual pet',
+                icon: Icons.pets,
+                onTap: viewModel.navigateToTamagotchi,
+              ),
               if (viewModel.hasError) ...[
                 const Gap(20),
                 Text(
