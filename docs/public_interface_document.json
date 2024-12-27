@@ -1,7 +1,7 @@
 {
   "package_name": "com.mycompany.my_app_123",
-  "project_description": "A multi-feature Flutter mobile application built using Stacked architecture, providing a comprehensive user experience with counter functionality, custom dialogs, bottom sheets, Firebase integration, and patient record management. The app supports multiple environments, localization, and offers a modular, extensible design focusing on maintainability and user interaction.",
-  "architecture_overview": "The application leverages the Stacked MVVM architecture with a strong emphasis on dependency injection, service-based design, and modular component organization. It implements a clean architectural pattern utilizing ViewModels for state management, services for cross-cutting concerns, and a robust routing system. The design enables scalable development with clear separation of concerns across different application features.",
+  "project_description": "A multi-feature Flutter mobile application built using Stacked architecture, providing a comprehensive user experience with counter functionality, patient record management, custom dialogs, bottom sheets, and Firebase integration. The app supports multiple environments, localization, and offers a modular, extensible design focused on maintainability.",
+  "architecture_overview": "The application leverages the Stacked MVVM architecture with a strong emphasis on dependency injection, service-based design, and modular component organization. It implements a clean architectural pattern utilizing ViewModels for state management, services for cross-cutting concerns, and a robust routing system that enables scalable development with clear separation of concerns.",
   "files": [
     {
       "name": "lib/app/app.dart",
