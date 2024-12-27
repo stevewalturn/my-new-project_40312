@@ -4,6 +4,7 @@ import 'package:my_app_123/models/patient_record.dart';
 import 'package:my_app_123/services/shared_preferences_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:my_app_123/ui/widgets/patient_record_form.dart';
 
 class PatientViewModel extends BaseViewModel {
   final _sharedPreferencesService = locator<SharedPreferencesService>();
